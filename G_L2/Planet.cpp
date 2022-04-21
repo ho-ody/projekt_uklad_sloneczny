@@ -10,7 +10,6 @@ void generuj_koordynaty_wierzcholkow(double r, double kat, int i_wierzcholka, do
 	double a = tan(i_wierzcholka * kat);
 	*y = sqrt(r * r / (1 + a * a));
 	*x = abs(a) * *y;
-
 	//korekta w zale¿noœci od æwiartki uk³adu wspó³rzêdnych
 	if (i_wierzcholka * kat < M_PI / 2.)              // - +
 	{
@@ -21,7 +20,7 @@ void generuj_koordynaty_wierzcholkow(double r, double kat, int i_wierzcholka, do
 		*x *= -1;
 		*y *= -1;
 	}
-	else if (i_wierzcholka * kat < 3.*M_PI / 2.)         // + -
+	else if (i_wierzcholka * kat < 3. * M_PI / 2.)       // + -
 	{
 		*y *= -1;
 	}
@@ -171,6 +170,13 @@ Planet::Planet(double size_in, double speed_in, double radius_x_in, double radiu
 	EBO_ = EBO(indices, sizeof(GLuint) * n_indices);
 	VAO_.LinkVBO(VBO_, 0, 1);
 	VAO_.Unbind();
+	//oribt
+	// kolejnosc argumentow:
+	//	 rozmiar_planety								
+	//   predkosc_ruchu_planety						
+	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips ró¿ne)
+	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
+	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
 }
 
 void Planet::update(double time, GLuint dxID, GLuint dyID) {
@@ -186,14 +192,14 @@ void Planet::update(double time, GLuint dxID, GLuint dyID) {
 	glUniform1f(dyID, dy);
 }
 
-void Planet::updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, Planet &p) {
+void Planet::updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, double centerToFollow_x, double centerToFollow_y) {
 	double dx = center_x;
 	double dy = center_y;
 
 	center_x = 1. / speed * radius_x * sin(speed * time);
 	center_y = 1. / speed * radius_y * cos(speed * time);
-	center_x += p.center_x;
-	center_y += p.center_y;
+	center_x += centerToFollow_x;
+	center_y += centerToFollow_y;
 	dx -= center_x;
 	dy -= center_y;
 

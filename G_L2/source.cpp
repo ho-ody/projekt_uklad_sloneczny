@@ -19,14 +19,20 @@ void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID) {
 	obiekt.VAO_.Unbind();
 }
 void drawIt(Planet& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiektWokolKtoregoKrazy) {
-	obiekt.updateCenterByOtherPlanet(time, dxID, dyID, obiektWokolKtoregoKrazy);
+	obiekt.updateCenterByOtherPlanet(time, dxID, dyID, obiektWokolKtoregoKrazy.center_x, obiektWokolKtoregoKrazy.center_y);
 	obiekt.VAO_.Bind();
 	glDrawElements(GL_TRIANGLES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
 	obiekt.VAO_.Unbind();
 }
 void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID) {
-	obiekt.VAO_.Bind();
 	obiekt.update(time, dxID, dyID);
+	obiekt.VAO_.Bind();
+	glDrawElements(GL_LINES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
+	obiekt.VAO_.Unbind();
+}
+void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiektWokolKtoregoKrazy) {
+	obiekt.updateCenterByOtherPlanet(time, dxID, dyID, obiektWokolKtoregoKrazy.center_x, obiektWokolKtoregoKrazy.center_y);
+	obiekt.VAO_.Bind();
 	glDrawElements(GL_LINES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
 	obiekt.VAO_.Unbind();
 }
@@ -68,10 +74,14 @@ int main() {
 	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
 	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
 	Planet p1(2, 2, 15, 15, .5, .5, .5);
+	Orbit o1(15, 15);
+
 	Planet p2(1, 2.4, 23, 23, .2, .7, .7);
+	Orbit o2(23, 23);
+
 	Planet p3(1.2, 2.4, 15, 80, .3, .6, .5);
-	Planet k1(0.4, 1.2, 20, 20, .9, .2, .2, p3.center_x, p3.center_y);
-	Orbit o1(8, 1, 0, 0, 1, 1, 1);
+	Orbit o3(25, 15, p3.center_x, p3.center_y);
+	Planet k1(0.4, 1.2, 25, 15, .9, .2, .2, p3.center_x, p3.center_y);
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -92,16 +102,15 @@ int main() {
 		shaderProgram.Activate();
 		// rysowanie trójk¹tów
 		// ========= //
+		// ORBITY
+		drawIt(o1, time, dxID, dyID);
+		drawIt(o2, time, dxID, dyID);
+		drawIt(o3, time, dxID, dyID, p3);
 		// PLANETY
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		drawIt(p1, time, dxID, dyID);
 		drawIt(p2, time, dxID, dyID);
 		drawIt(p3, time, dxID, dyID);
 		drawIt(k1, time, dxID, dyID, p3);
-		// ORBITY
-		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
-		drawIt(o1, time, dxID, dyID);
-
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);

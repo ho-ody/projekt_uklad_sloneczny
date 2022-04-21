@@ -5,11 +5,11 @@
 #include <iostream>
 
 
-void orbit_generuj_koordynaty_wierzcholkow(double r, double kat, int i_wierzcholka, double* x, double* y)
+void orbit_generuj_koordynaty_wierzcholkow(double rx, double ry, double kat, int i_wierzcholka, double* x, double* y)
 {
 	double a = tan(i_wierzcholka * kat);
-	*y = sqrt(r * r / (1 + a * a));
-	*x = abs(a) * *y;
+	*y = sqrt(ry * ry / (1 + a * a));
+	*x = abs(a) * *y * rx / ry;
 
 	//korekta w zale¿noœci od æwiartki uk³adu wspó³rzêdnych
 	if (i_wierzcholka * kat < M_PI / 2.)              // - +
@@ -27,17 +27,18 @@ void orbit_generuj_koordynaty_wierzcholkow(double r, double kat, int i_wierzchol
 	}
 }
 
-Orbit::Orbit(double size_in, double speed_in, double radius_x_in, double radius_y_in, double color_r, double color_g, double color_b, double center_x_in, double center_y_in) {
+Orbit::Orbit(double rx, double ry, double center_x_in, double center_y_in) {
 	//std zmienne
-	color[0] = color_r;
-	color[1] = color_g;
-	color[2] = color_b;
-	size = size_in;
+	color[0] = 1;
+	color[1] = 1;
+	color[2] = 1;
+	size_x = 0.1 * rx;
+	size_y = 0.1 * ry;
 	center_x = center_x_in;
 	center_y = center_y_in;
-	radius_x = radius_x_in;
-	radius_y = radius_y_in;
-	speed = speed_in;
+	radius_x = 0;
+	radius_y = 0;
+	speed = 1.;
 	//
 	n_vertices = 5 * n_wierzcholkow;
 	vertices = new GLfloat[n_vertices];
@@ -49,7 +50,7 @@ Orbit::Orbit(double size_in, double speed_in, double radius_x_in, double radius_
 	double x, y;
 	//vertices
 	for (int i = 0; i < n_wierzcholkow; i++) {
-		orbit_generuj_koordynaty_wierzcholkow(size, kat, i_wierzcholka, &x, &y);
+		orbit_generuj_koordynaty_wierzcholkow(size_x, size_y, kat, i_wierzcholka, &x, &y);
 		vertices[0 + 5 * i] = x;
 		vertices[1 + 5 * i] = y;
 		vertices[2 + 5 * i] = color[0];
@@ -79,28 +80,27 @@ void Orbit::update(double time, GLuint dxID, GLuint dyID) {
 
 	center_x = 1. / speed * radius_x * sin(speed * time);
 	center_y = 1. / speed * radius_y * cos(speed * time);
+
 	dx -= center_x;
 	dy -= center_y;
 
 	glUniform1f(dxID, dx);
 	glUniform1f(dyID, dy);
 }
-
-void Orbit::updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, Planet& p) {
+void Orbit::updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, double centerToFollow_x, double centerToFollow_y) {
 	double dx = center_x;
 	double dy = center_y;
 
 	center_x = 1. / speed * radius_x * sin(speed * time);
 	center_y = 1. / speed * radius_y * cos(speed * time);
-	center_x += p.center_x;
-	center_y += p.center_y;
+	center_x += centerToFollow_x;
+	center_y += centerToFollow_y;
 	dx -= center_x;
 	dy -= center_y;
 
 	glUniform1f(dxID, dx);
 	glUniform1f(dyID, dy);
 }
-
 
 Orbit::~Orbit() {
 	delete[] vertices, indices;

@@ -17,7 +17,8 @@ public:
 	VBO VBO_;
 	EBO EBO_;
 
-	double size;
+	double size_x;
+	double size_y;
 	double color[3] = { 0. };
 	double center_x, center_y;
 	double speed; //liniowa prêdkoœæ - styczna do okregu
@@ -25,9 +26,10 @@ public:
 	double radius_y; //odlegosc od srodka - pionowo (w przypadku elips radius_x != radius_y)
 
 	// (double rozmiar_planety, double predkosc_ruchu_planety, double promien_okregu_x, double promien_okregu_y, double color_r, double color_g, double color_b, double srodek_okregu_ruchu_x = 0., double srodek_okregu_ruchu_y = 0.);
-	Orbit(double rozmiar_planety, double predkosc_ruchu_planety, double promien_okregu_x, double promien_okregu_y, double color_r, double color_g, double color_b, double srodek_okregu_ruchu_x = 0., double srodek_okregu_ruchu_y = 0.);
+	Orbit(double promienPlanety_x, double promienPlanety_y, double srodek_okregu_ruchu_x = 0., double srodek_okregu_ruchu_y = 0.);
+	Orbit() {};
 	~Orbit();
 
 	void update(double time, GLuint dxID, GLuint dyID);
-	void updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, Planet& p);
+	void updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, double centerToFollow_x, double centerToFollow_y);
 };
