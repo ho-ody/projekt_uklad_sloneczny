@@ -124,6 +124,8 @@ Planet::Planet(double r_in, double color_r, double color_g, double color_b) {
 	color[1] = color_g;
 	color[2] = color_b;
 	r = r_in;
+	center_x = 0.;
+	center_y = 0.;
 	//
 	n_vertices = 5 * n_wierzcholkow;
 	vertices = new GLfloat[n_vertices];
@@ -167,6 +169,41 @@ Planet::Planet(double r_in, double color_r, double color_g, double color_b) {
 	VAO_.Unbind();
 }
 
+void Planet::update(double time, GLuint dxID, GLuint dyID, double m, double s) {
+	
+	//double m = 0.5;
+	//double s = 10.;
+
+	double dx = center_x;
+	double dy = center_y;
+
+	center_x = 1. / m * s * sin(m * time);
+	center_y = 1. / m * s * cos(m * time);
+	dx -= center_x;
+	dy -= center_y;
+
+	glUniform1f(dxID, dx);
+	glUniform1f(dyID, dy);
+}
+
+/*
+	xx += 0.02;
+		a = sin(xx) / 2 + 0.5;
+		b = sin(-xx) / 2 + 0.5;
+		c = sin(xx + 1.57) / 2 + 0.5;
+
+
+		double mult = 0.5; //speed
+		double scaller = 10.; //radius
+
+		dx = x;
+		dy = y;
+		x = 1 / mult * scaller * 1.2 * sin(mult * xx);
+		y = 1 / mult * scaller * cos(mult * xx);
+		dx -= x;
+		dy -= y;
+
+*/
 
 Planet::~Planet(){
 	delete[] vertices, indices;

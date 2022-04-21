@@ -324,6 +324,7 @@ int main() {
 	double x = 0, y = 0, dx = 0, dy = 0;
 	
 	Planet p1(0.5, .5, .5, .5);
+	Planet p2(1.0, .2, .7, .7);
 
 	while (!glfwWindowShouldClose(window))
 	{
@@ -378,7 +379,10 @@ int main() {
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		drawIt(n_verticles_to_draw,0);
+		p1.update(xx, dxID, dyID);
 		drawIt(p1);
+		p2.update(xx, dxID, dyID, 1.);
+		drawIt(p2);
 
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
