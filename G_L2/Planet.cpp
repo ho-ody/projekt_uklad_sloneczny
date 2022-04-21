@@ -173,7 +173,6 @@ Planet::Planet(double size_in, double speed_in, double radius_x_in, double radiu
 }
 
 void Planet::update(double time, GLuint dxID, GLuint dyID) {
-	
 	double dx = center_x;
 	double dy = center_y;
 
@@ -186,24 +185,21 @@ void Planet::update(double time, GLuint dxID, GLuint dyID) {
 	glUniform1f(dyID, dy);
 }
 
-/*
-	xx += 0.02;
-		a = sin(xx) / 2 + 0.5;
-		b = sin(-xx) / 2 + 0.5;
-		c = sin(xx + 1.57) / 2 + 0.5;
+void Planet::updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, Planet &p) {
+	double dx = center_x;
+	double dy = center_y;
 
+	center_x = 1. / speed * radius_x * sin(speed * time);
+	center_y = 1. / speed * radius_y * cos(speed * time);
+	center_x += p.center_x;
+	center_y += p.center_y;
+	dx -= center_x;
+	dy -= center_y;
 
-		double mult = 0.5; //speed
-		double scaller = 10.; //radius
+	glUniform1f(dxID, dx);
+	glUniform1f(dyID, dy);
+}
 
-		dx = x;
-		dy = y;
-		x = 1 / mult * scaller * 1.2 * sin(mult * xx);
-		y = 1 / mult * scaller * cos(mult * xx);
-		dx -= x;
-		dy -= y;
-
-*/
 
 Planet::~Planet(){
 	delete[] vertices, indices;

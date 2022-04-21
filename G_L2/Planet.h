@@ -28,4 +28,5 @@ public:
 	~Planet();
 	
 	void update(double time, GLuint dxID, GLuint dyID);
+	void updateCenterByOtherPlanet(double time, GLuint dxID, GLuint dyID, Planet& p);
 };	

@@ -11,11 +11,17 @@ using namespace std;
 #include "ShaderClass.h"
 #include "Planet.h"
 
-void drawIt(Planet &p, double time, GLuint dxID, GLuint dyID) {
-	p.update(time, dxID, dyID);
-	p.VAO_.Bind();
-	glDrawElements(GL_TRIANGLES, p.n_vertices, GL_UNSIGNED_INT, 0);
-	p.VAO_.Unbind();
+void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID) {
+	obiekt.update(time, dxID, dyID);
+	obiekt.VAO_.Bind();
+	glDrawElements(GL_TRIANGLES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
+	obiekt.VAO_.Unbind();
+}
+void drawIt(Planet& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiektWokolKtoregoKrazy) {
+	obiekt.updateCenterByOtherPlanet(time, dxID, dyID, obiektWokolKtoregoKrazy);
+	obiekt.VAO_.Bind();
+	glDrawElements(GL_TRIANGLES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
+	obiekt.VAO_.Unbind();
 }
 int main() {
 	srand(time(NULL));
@@ -57,7 +63,7 @@ int main() {
 	Planet p1(2, 2, 15, 15, .5, .5, .5);
 	Planet p2(1, 2.4, 23, 23, .2, .7, .7);
 	Planet p3(1.2, 2.4, 15, 80, .3, .6, .5);
-	Planet k1(0.4, 1.2, 10, 10, .9, .2, .2, p3.center_x, p3.center_y);
+	Planet k1(0.4, 1.2, 20, 20, .9, .2, .2, p3.center_x, p3.center_y);
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -81,7 +87,7 @@ int main() {
 		drawIt(p1, time, dxID, dyID);
 		drawIt(p2, time, dxID, dyID);
 		drawIt(p3, time, dxID, dyID);
-		drawIt(k1, time, dxID, dyID);
+		drawIt(k1, time, dxID, dyID, p3);
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
