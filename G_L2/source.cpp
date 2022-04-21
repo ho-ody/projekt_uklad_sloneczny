@@ -9,6 +9,7 @@ using namespace std;
 #include "VBO.h"
 #include "EBO.h"
 #include "ShaderClass.h"
+#include "Planet.h"
 
 
 int zad1(int size, GLfloat*& vertices, GLuint*& indices) {
@@ -197,7 +198,7 @@ int circle(int size, GLfloat*& vertices, GLuint*& indices) {
 	vertices = new  GLfloat[8 * ilosc_wierzcholkow];
 	indices = new GLuint[3 * (ilosc_wierzcholkow - 2)];
 
-	double r = 1.0;
+	double r = 1.5;
 	double kat_alfa = 2 * M_PI / ilosc_wierzcholkow;
 	double x = 0., y = r;
 
@@ -221,6 +222,11 @@ void drawIt(int n_verticles_to_draw, int mode = 0) {
 			glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, (void*)((i + 3) * sizeof(float)));
 		}
 	}
+}
+void drawIt(Planet &p) {
+	p.VAO_.Bind();
+	glDrawElements(GL_TRIANGLES, p.n_vertices, GL_UNSIGNED_INT, 0);
+	p.VAO_.Unbind();
 }
 void colorUpdate(float r, float g, float b, int size, GLfloat*& vertices) {
 	int iterator = 0;
@@ -291,6 +297,9 @@ int main() {
 	VBO VBO1(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
 	EBO EBO1(indices, sizeof(GLuint) * n_verticles_to_draw);
 
+
+	
+
 	VAO1.LinkVBO(VBO1, 0, 1);
 	VAO1.Unbind();
 
@@ -300,12 +309,22 @@ int main() {
 	int counter = 0;
 	float xx = 0;
 	VBO1.Bind(); //dynamiczna zmiana koloru
+
+
+	VAO VAO2;
+	VBO VBO2(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
+	EBO EBO2(indices, sizeof(GLuint) * n_verticles_to_draw);
+
+
+
 	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 	GLuint dxID = glGetUniformLocation(shaderProgram.ID, "dx");
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
 
 	double x = 0, y = 0, dx = 0, dy = 0;
 	
+	Planet p1(0.5, .5, .5, .5);
+
 	while (!glfwWindowShouldClose(window))
 	{
 		VBO1.dynamicUpdate(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
@@ -326,8 +345,8 @@ int main() {
 		dx -= x;
 		dy -= y;
 
-		glUniform1f(dxID, dx);
-		glUniform1f(dyID, dy);
+		//glUniform1f(dxID, dx);
+		//glUniform1f(dyID, dy);
 
 		float size = 0.1;
 
@@ -359,6 +378,8 @@ int main() {
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 		drawIt(n_verticles_to_draw,0);
+		drawIt(p1);
+
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
 		glfwPollEvents();
