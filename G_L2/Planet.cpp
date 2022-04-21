@@ -132,7 +132,7 @@ Planet::Planet(double size_in, double speed_in, double radius_x_in, double radiu
 	//
 	n_vertices = 5 * n_wierzcholkow;
 	vertices = new GLfloat[n_vertices];
-	n_indices = 3 * (n_wierzcholkow - 2);
+	n_indices = 3 * n_wierzcholkow;
 	indices = new GLuint[n_indices];
 
 	double kat = 2 * M_PI / n_wierzcholkow;
@@ -151,6 +151,7 @@ Planet::Planet(double size_in, double speed_in, double radius_x_in, double radiu
 	//indices
 	for (int i = 0, j = 0, k = 0; i < 3 * (n_wierzcholkow - 2); i++)
 	{
+		
 		if (i % 3 == 0) // pierwsza koordynata (zawsze równa 0)
 		{
 			indices[i] = 0;

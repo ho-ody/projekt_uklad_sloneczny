@@ -10,6 +10,7 @@ using namespace std;
 #include "EBO.h"
 #include "ShaderClass.h"
 #include "Planet.h"
+#include "Orbit.h"
 
 void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID) {
 	obiekt.update(time, dxID, dyID);
@@ -21,6 +22,12 @@ void drawIt(Planet& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiek
 	obiekt.updateCenterByOtherPlanet(time, dxID, dyID, obiektWokolKtoregoKrazy);
 	obiekt.VAO_.Bind();
 	glDrawElements(GL_TRIANGLES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
+	obiekt.VAO_.Unbind();
+}
+void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID) {
+	obiekt.VAO_.Bind();
+	obiekt.update(time, dxID, dyID);
+	glDrawElements(GL_LINES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
 	obiekt.VAO_.Unbind();
 }
 int main() {
@@ -64,6 +71,7 @@ int main() {
 	Planet p2(1, 2.4, 23, 23, .2, .7, .7);
 	Planet p3(1.2, 2.4, 15, 80, .3, .6, .5);
 	Planet k1(0.4, 1.2, 20, 20, .9, .2, .2, p3.center_x, p3.center_y);
+	Orbit o1(8, 1, 0, 0, 1, 1, 1);
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -84,10 +92,16 @@ int main() {
 		shaderProgram.Activate();
 		// rysowanie trójk¹tów
 		// ========= //
+		// PLANETY
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		drawIt(p1, time, dxID, dyID);
 		drawIt(p2, time, dxID, dyID);
 		drawIt(p3, time, dxID, dyID);
 		drawIt(k1, time, dxID, dyID, p3);
+		// ORBITY
+		//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+		drawIt(o1, time, dxID, dyID);
+
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
