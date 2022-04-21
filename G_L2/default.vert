@@ -3,7 +3,7 @@
 layout (location = 0) in vec2 position;
 layout (location = 1) in vec3 color;
 out vec3 Color;
-uniform float scale;
+uniform float scale = 0.1;
 uniform float dx;
 uniform float dy;
 void main()
