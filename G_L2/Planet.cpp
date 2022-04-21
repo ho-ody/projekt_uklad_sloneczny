@@ -118,7 +118,7 @@ int circle(int size, GLfloat*& vertices, GLuint*& indices) {
 */
 
 
-Planet::Planet(double size_in, double speed_in, double radius_in, double color_r, double color_g, double color_b, double center_x_in, double center_y_in) {
+Planet::Planet(double size_in, double speed_in, double radius_x_in, double radius_y_in, double color_r, double color_g, double color_b, double center_x_in, double center_y_in) {
 	//std zmienne
 	color[0] = color_r;
 	color[1] = color_g;
@@ -126,7 +126,8 @@ Planet::Planet(double size_in, double speed_in, double radius_in, double color_r
 	size = size_in;
 	center_x = center_x_in;
 	center_y = center_y_in;
-	radius = radius_in;
+	radius_x = radius_x_in;
+	radius_y = radius_y_in;
 	speed = speed_in;
 	//
 	n_vertices = 5 * n_wierzcholkow;
@@ -176,8 +177,8 @@ void Planet::update(double time, GLuint dxID, GLuint dyID) {
 	double dx = center_x;
 	double dy = center_y;
 
-	center_x = 1. / speed * radius * sin(speed * time);
-	center_y = 1. / speed * radius * cos(speed * time);
+	center_x = 1. / speed * radius_x * sin(speed * time);
+	center_y = 1. / speed * radius_y * cos(speed * time);
 	dx -= center_x;
 	dy -= center_y;
 

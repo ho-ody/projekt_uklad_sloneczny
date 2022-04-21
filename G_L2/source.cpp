@@ -12,10 +12,10 @@ using namespace std;
 #include "Planet.h"
 
 void drawIt(Planet &p, double time, GLuint dxID, GLuint dyID) {
+	p.update(time, dxID, dyID);
 	p.VAO_.Bind();
 	glDrawElements(GL_TRIANGLES, p.n_vertices, GL_UNSIGNED_INT, 0);
 	p.VAO_.Unbind();
-	p.update(time, dxID, dyID);
 }
 int main() {
 	srand(time(NULL));
@@ -48,9 +48,16 @@ int main() {
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
 	
 	// ========= //
-	// 
-	Planet p1(2, 0.5, 15, .5, .5, .5);
-	Planet p2(1, 1.2, 23, .2, .7, .7);
+	// kolejnosc argumentow:
+	//	 rozmiar_planety								
+	//   predkosc_ruchu_planety						
+	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips ró¿ne)
+	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
+	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
+	Planet p1(2, 2, 15, 15, .5, .5, .5);
+	Planet p2(1, 2.4, 23, 23, .2, .7, .7);
+	Planet p3(1.2, 2.4, 15, 80, .3, .6, .5);
+	Planet k1(0.4, 1.2, 10, 10, .9, .2, .2, p3.center_x, p3.center_y);
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -73,6 +80,8 @@ int main() {
 		// ========= //
 		drawIt(p1, time, dxID, dyID);
 		drawIt(p2, time, dxID, dyID);
+		drawIt(p3, time, dxID, dyID);
+		drawIt(k1, time, dxID, dyID);
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
