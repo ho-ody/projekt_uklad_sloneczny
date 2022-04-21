@@ -118,14 +118,16 @@ int circle(int size, GLfloat*& vertices, GLuint*& indices) {
 */
 
 
-Planet::Planet(double r_in, double color_r, double color_g, double color_b) {
+Planet::Planet(double size_in, double speed_in, double radius_in, double color_r, double color_g, double color_b, double center_x_in, double center_y_in) {
 	//std zmienne
 	color[0] = color_r;
 	color[1] = color_g;
 	color[2] = color_b;
-	r = r_in;
-	center_x = 0.;
-	center_y = 0.;
+	size = size_in;
+	center_x = center_x_in;
+	center_y = center_y_in;
+	radius = radius_in;
+	speed = speed_in;
 	//
 	n_vertices = 5 * n_wierzcholkow;
 	vertices = new GLfloat[n_vertices];
@@ -137,7 +139,7 @@ Planet::Planet(double r_in, double color_r, double color_g, double color_b) {
 	double x, y;
 	//vertices
 	for (int i = 0; i < n_wierzcholkow; i++) {
-		generuj_koordynaty_wierzcholkow(r, kat, i_wierzcholka, &x, &y);
+		generuj_koordynaty_wierzcholkow(size, kat, i_wierzcholka, &x, &y);
 		vertices[0 + 5 * i] = x;
 		vertices[1 + 5 * i] = y;
 		vertices[2 + 5 * i] = color[0];
@@ -169,16 +171,13 @@ Planet::Planet(double r_in, double color_r, double color_g, double color_b) {
 	VAO_.Unbind();
 }
 
-void Planet::update(double time, GLuint dxID, GLuint dyID, double m, double s) {
+void Planet::update(double time, GLuint dxID, GLuint dyID) {
 	
-	//double m = 0.5;
-	//double s = 10.;
-
 	double dx = center_x;
 	double dy = center_y;
 
-	center_x = 1. / m * s * sin(m * time);
-	center_y = 1. / m * s * cos(m * time);
+	center_x = 1. / speed * radius * sin(speed * time);
+	center_y = 1. / speed * radius * cos(speed * time);
 	dx -= center_x;
 	dy -= center_y;
 

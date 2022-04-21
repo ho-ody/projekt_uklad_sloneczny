@@ -223,10 +223,11 @@ void drawIt(int n_verticles_to_draw, int mode = 0) {
 		}
 	}
 }
-void drawIt(Planet &p) {
+void drawIt(Planet &p, double time, GLuint dxID, GLuint dyID) {
 	p.VAO_.Bind();
 	glDrawElements(GL_TRIANGLES, p.n_vertices, GL_UNSIGNED_INT, 0);
 	p.VAO_.Unbind();
+	p.update(time, dxID, dyID);
 }
 void colorUpdate(float r, float g, float b, int size, GLfloat*& vertices) {
 	int iterator = 0;
@@ -256,8 +257,8 @@ void colorUpdateV2(float r, float g, float b, int size, GLfloat*& vertices) {
 	}
 }
 
-GLfloat* vertices = NULL;
-GLuint* indices = NULL;
+//GLfloat* vertices = NULL;
+//GLuint* indices = NULL;
 int main() {
 	srand(time(NULL));
 	glfwInit();
@@ -286,70 +287,74 @@ int main() {
 	// Utwórz obiekt Vertex Shader
 	Shader shaderProgram("default.vert", "default.frag");
 
-	VAO VAO1;
-	VAO1.Bind();
+	//VAO VAO1;
+	//VAO1.Bind();
 	//
-	int size = 6;
-	int n_verticles_to_draw = 4;
-	n_verticles_to_draw = circle(size, vertices, indices);
+	//int size = 6;
+	//int n_verticles_to_draw = 4;
+	//n_verticles_to_draw = circle(size, vertices, indices);
 
 
-	VBO VBO1(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
-	EBO EBO1(indices, sizeof(GLuint) * n_verticles_to_draw);
+	//VBO VBO1(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
+	//EBO EBO1(indices, sizeof(GLuint) * n_verticles_to_draw);
 
 
 	
 
-	VAO1.LinkVBO(VBO1, 0, 1);
-	VAO1.Unbind();
+	//VAO1.LinkVBO(VBO1, 0, 1);
+	//VAO1.Unbind();
 
 	float a = 0.383, b = 0.336, c = 0.449;
 	glfwSwapInterval(1); //ograniczenie fps to synchronizacji vsync
 	//glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); //kontury
-	int counter = 0;
-	float xx = 0;
-	VBO1.Bind(); //dynamiczna zmiana koloru
+	//float xx = 0;
+	//VBO1.Bind(); //dynamiczna zmiana koloru
 
 
-	VAO VAO2;
-	VBO VBO2(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
-	EBO EBO2(indices, sizeof(GLuint) * n_verticles_to_draw);
+	//VAO VAO2;
+	//VBO VBO2(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
+	//EBO EBO2(indices, sizeof(GLuint) * n_verticles_to_draw);
 
 
 
-	GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
+	//GLuint uniID = glGetUniformLocation(shaderProgram.ID, "scale");
 	GLuint dxID = glGetUniformLocation(shaderProgram.ID, "dx");
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
 
-	double x = 0, y = 0, dx = 0, dy = 0;
+	//double x = 0, y = 0, dx = 0, dy = 0;
 	
-	Planet p1(0.5, .5, .5, .5);
-	Planet p2(1.0, .2, .7, .7);
+	Planet p1(2, 0.5, 15, .5, .5, .5);
+	Planet p2(1, 1.2, 23, .2, .7, .7);
 
+	double time = 0.;
+	//double sizeOfPictureScaller = 0.1;
+	//glUniform1f(uniID, sizeOfPictureScaller);
 	while (!glfwWindowShouldClose(window))
 	{
-		VBO1.dynamicUpdate(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
+		time += 0.01;
+		//VBO1.dynamicUpdate(vertices, sizeof(GLfloat) * (size + 1) * (size + 1) * 5);
 		// Ustaw kolor t³a (RGBA, z przedzia³u <0, 1>)
-		xx += 0.02;
-		a = sin(xx) / 2 + 0.5;
-		b = sin(-xx) / 2 + 0.5;
-		c = sin(xx + 1.57) / 2 + 0.5;
+		
+		//xx = time;
+		//a = sin(xx) / 2 + 0.5;
+		//b = sin(-xx) / 2 + 0.5;
+		//c = sin(xx + 1.57) / 2 + 0.5;
 
 
-		double mult = 0.5; //speed
-		double scaller = 10.; //radius
+		//double mult = 0.5; //speed
+		//double scaller = 10.; //radius
 
-		dx = x;
-		dy = y;
-		x = 1 / mult * scaller * 1.2 * sin(mult * xx);
-		y = 1 / mult * scaller * cos(mult * xx);
-		dx -= x;
-		dy -= y;
+		//dx = x;
+		//dy = y;
+		//x = 1 / mult * scaller * 1.2 * sin(mult * xx);
+		//y = 1 / mult * scaller * cos(mult * xx);
+		//dx -= x;
+		//dy -= y;
 
 		//glUniform1f(dxID, dx);
 		//glUniform1f(dyID, dy);
 
-		float size = 0.1;
+		
 
 		/*
 		for (int i = 0; i < (size+1)*(size+1); i++)
@@ -358,11 +363,12 @@ int main() {
 			vertices[5*i+1] += dy;
 		}
 		*/
-
+		a = b = cos(time/4.) / 26. ;
+		c = sin(time/4.) / 14. + .25;
 
 		glClearColor(a, b, c, 1.0f);
 		// color update
-		colorUpdate(b, c, a, size, vertices);
+		//colorUpdate(b, c, a, size, vertices);
 		//colorUpdateV2(a, b, c, size, vertices);
 		// Wyczyœæ buffor I nadaj mu kolor
 		glClear(GL_COLOR_BUFFER_BIT);
@@ -372,17 +378,15 @@ int main() {
 
 
 
-		glUniform1f(uniID, size);
+		
 
-		VAO1.Bind();
+		//VAO1.Bind();
 		// Narysuj trójk¹ty
 		//glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		//glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
-		drawIt(n_verticles_to_draw,0);
-		p1.update(xx, dxID, dyID);
-		drawIt(p1);
-		p2.update(xx, dxID, dyID, 1.);
-		drawIt(p2);
+		//drawIt(n_verticles_to_draw,0);
+		drawIt(p1, time, dxID, dyID);
+		drawIt(p2, time, dxID, dyID);
 
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
@@ -393,11 +397,11 @@ int main() {
 	// Terminate GLFW before ending the program
 	glfwTerminate();
 
-	VAO1.Delete();
-	VBO1.Delete();
-	EBO1.Delete();
-	delete[] vertices;
-	delete[] indices;
+	//VAO1.Delete();
+	//VBO1.Delete();
+	//EBO1.Delete();
+	//delete[] vertices;
+	//delete[] indices;
 
 	return 0;
 }
