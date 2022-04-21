@@ -22,7 +22,8 @@ public:
 	double speed; //liniowa prêdkoœæ - styczna do okregu
 	double radius; //odlegosc od srodka
 
-	Planet(double size_in, double speed_in, double radius_in, double color_r, double color_g, double color_b, double center_x_in = 0., double center_y_in = 0.);
+	// 
+	Planet(double rozmiar_planety, double predkosc_ruchu_planety, double promien_okregu_x, double color_r, double color_g, double color_b, double srodek_okregu_ruchu_x = 0., double srodek_okregu_ruchu_y = 0.);
 	~Planet();
 	
 	void update(double time, GLuint dxID, GLuint dyID);
