@@ -73,15 +73,16 @@ int main() {
 	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips ró¿ne)
 	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
 	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
-	Planet p1(2, 2, 15, 15, .5, .5, .5);
-	Orbit o1(15, 15);
+	Planet p1(2, 2, 40, 40, .5, .5, .5);
+	Orbit o1(40, 40);
 
 	Planet p2(1, 2.4, 23, 23, .2, .7, .7);
 	Orbit o2(23, 23);
 
 	Planet p3(1.2, 2.4, 15, 80, .3, .6, .5);
-	Orbit o3(25, 15, p3.center_x, p3.center_y);
+	Orbit o3(15, 80);
 	Planet k1(0.4, 1.2, 25, 15, .9, .2, .2, p3.center_x, p3.center_y);
+	Orbit o4(25, 15, p3.center_x, p3.center_y);
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -105,7 +106,8 @@ int main() {
 		// ORBITY
 		drawIt(o1, time, dxID, dyID);
 		drawIt(o2, time, dxID, dyID);
-		drawIt(o3, time, dxID, dyID, p3);
+		drawIt(o3, time, dxID, dyID);
+		drawIt(o4, time, dxID, dyID, p3);
 		// PLANETY
 		drawIt(p1, time, dxID, dyID);
 		drawIt(p2, time, dxID, dyID);
