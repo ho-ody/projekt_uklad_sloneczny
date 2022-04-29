@@ -79,8 +79,8 @@
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <LinkIncremental>true</LinkIncremental>
-    <IncludePath>E:\x_Studia\Stuff\OpenGLstuff\include;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\x_Studia\Stuff\OpenGLstuff\libs;$(LibraryPath)</LibraryPath>
+    <IncludePath>J:\C++\Grafika Komputerowa\OpenGL\libraries\include;$(IncludePath)</IncludePath>
+    <LibraryPath>J:\C++\Grafika Komputerowa\OpenGL\libraries\lib</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <LinkIncremental>false</LinkIncremental>

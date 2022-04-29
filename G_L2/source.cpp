@@ -73,6 +73,7 @@ int main() {
 	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips ró¿ne)
 	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
 	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
+
 	Planet p1(2, 2, 40, 40, .5, .5, .5);
 	Orbit o1(40, 40);
 
@@ -83,6 +84,26 @@ int main() {
 	Orbit o3(15, 80);
 	Planet k1(0.4, 1.2, 25, 15, .9, .2, .2, p3.center_x, p3.center_y);
 	Orbit o4(25, 15, p3.center_x, p3.center_y);
+
+	Planet Mercury(0.069849839, 2.306994196, 20.6064265, 17.91523936, 26, 26, 26);
+	Orbit mercuryOrbit(Mercury.radius_x, Mercury.radius_y);
+	Planet Venus(0.11001818, 1.972026594, 23.88428091, 23.73729699, 230, 230, 230);
+	Orbit venusOrbit(Venus.radius_x,Venus.radius_y);
+	Planet Earth(0.112942463, 1.819645875, 26.68401649, 26.38816044, 47, 106, 105);
+	Orbit earthOrbit(Earth.radius_x, Earth.radius_y);
+	Planet Mars(0.082492424, 1.636391694, 31.45597276, 29.4818427, 153, 61, 0);
+	Orbit marsOrbit(Mars.radius_x, Mars.radius_y);
+	Planet Jupiter(0.378132252, 1.206464071, 46.7423658, 45.24557103, 176, 127, 53);
+	Orbit jupiterOrbit(Jupiter.radius_x, Jupiter.radius_y);
+	Planet Saturn(0.347182949, 1.038160767, 57.362621, 55.26047248, 176, 143, 54);
+	Orbit saturnOrbit(Saturn.radius_x, Saturn.radius_y);
+	Planet Ur_Anus(0.226092901, 0.869226987, 72.11247852, 70.05098327, 85, 128, 170);
+	Orbit uranusOrbit(Ur_Anus.radius_x, Ur_Anus.radius_y);
+	Planet Neptune(0.222548871, 0.774596669, 82.85278982, 82.24130783, 54, 104, 150);
+	Orbit neptuneOrbit(Neptune.radius_x, Neptune.radius_y);
+
+	Planet Sun(1.179830496, 1, 0, 0, 239, 142, 56);
+
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -104,15 +125,34 @@ int main() {
 		// rysowanie trójk¹tów
 		// ========= //
 		// ORBITY
-		drawIt(o1, time, dxID, dyID);
-		drawIt(o2, time, dxID, dyID);
-		drawIt(o3, time, dxID, dyID);
-		drawIt(o4, time, dxID, dyID, p3);
+		//drawIt(o1, time, dxID, dyID);
+		//drawIt(o2, time, dxID, dyID);
+		//drawIt(o3, time, dxID, dyID);
+		//drawIt(o4, time, dxID, dyID, p3);
+		drawIt(mercuryOrbit, time, dxID, dyID);
+		drawIt(venusOrbit, time, dxID, dyID);
+		drawIt(earthOrbit, time, dxID, dyID);
+		drawIt(marsOrbit, time, dxID, dyID);
+		drawIt(jupiterOrbit, time, dxID, dyID);
+		drawIt(saturnOrbit, time, dxID, dyID);
+		drawIt(uranusOrbit, time, dxID, dyID);
+		drawIt(neptuneOrbit, time, dxID, dyID);
+		
 		// PLANETY
-		drawIt(p1, time, dxID, dyID);
-		drawIt(p2, time, dxID, dyID);
-		drawIt(p3, time, dxID, dyID);
-		drawIt(k1, time, dxID, dyID, p3);
+		//drawIt(p1, time, dxID, dyID);
+		//drawIt(p2, time, dxID, dyID);
+		//drawIt(p3, time, dxID, dyID);
+		//drawIt(k1, time, dxID, dyID, p3);
+		drawIt(Mercury, time, dxID, dyID);
+		drawIt(Venus, time, dxID, dyID);
+		drawIt(Earth, time, dxID, dyID);
+		drawIt(Mars, time, dxID, dyID);
+		drawIt(Jupiter, time, dxID, dyID);
+		drawIt(Saturn, time, dxID, dyID);
+		drawIt(Ur_Anus, time, dxID, dyID);
+		drawIt(Neptune, time, dxID, dyID);
+
+		drawIt(Sun, time, dxID, dyID);
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);

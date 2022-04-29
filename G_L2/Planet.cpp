@@ -119,9 +119,9 @@ int circle(int size, GLfloat*& vertices, GLuint*& indices) {
 
 Planet::Planet(double size_in, double speed_in, double radius_x_in, double radius_y_in, double color_r, double color_g, double color_b, double center_x_in, double center_y_in) {
 	//std zmienne
-	color[0] = color_r;
-	color[1] = color_g;
-	color[2] = color_b;
+	color[0] = color_r / 255;
+	color[1] = color_g / 255;
+	color[2] = color_b / 255;
 	size = size_in;
 	center_x = center_x_in;
 	center_y = center_y_in;
