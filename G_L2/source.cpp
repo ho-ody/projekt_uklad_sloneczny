@@ -102,7 +102,18 @@ int main() {
 	Planet Neptune(0.222548871, 0.774596669, 82.85278982, 82.24130783, 54, 104, 150);
 	Orbit neptuneOrbit(Neptune.radius_x, Neptune.radius_y);
 
-	Planet Sun(1.179830496, 1, 0, 0, 239, 142, 56);
+	Planet Sun(1, 179830496, 1, 0, 239, 142, 56);
+
+	Planet Ganymede(0.072594766, 0.5, 5.114045609, 5.114045609, 179, 177, 176, Jupiter.center_x, Jupiter.center_y);
+	Orbit ganymedeOrbit(5.114045609, 5.114045609, Jupiter.center_x, Jupiter.center_y);
+	Planet Titan(0.0717635, 1, 5.313292846, 5.313292846, 224, 194, 133, Saturn.center_x, Saturn.center_y);
+	Orbit titanOrbit(5.313292846, 5.313292846, Saturn.center_x, Saturn.center_y);
+	Planet Callisto(0.06942622, 1, 6.171005793, 6.171005793, 160, 189, 183, Jupiter.center_x, Jupiter.center_y);
+	Orbit callistoOrbit(6.171005793, 6.171005793, Jupiter.center_x, Jupiter.center_y);
+	Planet Io(0.06035727, 1, 3.74948141, 3.74948141, 204, 153, 0, Jupiter.center_x, Jupiter.center_y);
+	Orbit ioOrbit(3.74948141, 3.74948141, Jupiter.center_x, Jupiter.center_y);
+	Planet Moon(0.058949131, 1, 3.701436014, 3.567086838, 254, 252, 215, Earth.center_x, Earth.center_y);
+	Orbit moonOrbit(3.701436014, 3.567086838, Earth.center_x, Earth.center_y);
 
 	// ========= //
 
@@ -125,10 +136,7 @@ int main() {
 		// rysowanie trójk¹tów
 		// ========= //
 		// ORBITY
-		//drawIt(o1, time, dxID, dyID);
-		//drawIt(o2, time, dxID, dyID);
-		//drawIt(o3, time, dxID, dyID);
-		//drawIt(o4, time, dxID, dyID, p3);
+		
 		drawIt(mercuryOrbit, time, dxID, dyID);
 		drawIt(venusOrbit, time, dxID, dyID);
 		drawIt(earthOrbit, time, dxID, dyID);
@@ -139,10 +147,6 @@ int main() {
 		drawIt(neptuneOrbit, time, dxID, dyID);
 		
 		// PLANETY
-		//drawIt(p1, time, dxID, dyID);
-		//drawIt(p2, time, dxID, dyID);
-		//drawIt(p3, time, dxID, dyID);
-		//drawIt(k1, time, dxID, dyID, p3);
 		drawIt(Mercury, time, dxID, dyID);
 		drawIt(Venus, time, dxID, dyID);
 		drawIt(Earth, time, dxID, dyID);
@@ -151,8 +155,21 @@ int main() {
 		drawIt(Saturn, time, dxID, dyID);
 		drawIt(Ur_Anus, time, dxID, dyID);
 		drawIt(Neptune, time, dxID, dyID);
-
+		
 		drawIt(Sun, time, dxID, dyID);
+
+		// KSIÊ¯YCE
+		drawIt(Ganymede, time, dxID, dyID, Jupiter);
+		drawIt(ganymedeOrbit, time, dxID, dyID, Jupiter);
+		drawIt(Titan, time, dxID, dyID, Saturn);
+		drawIt(titanOrbit, time, dxID, dyID, Saturn);
+		drawIt(Callisto, time, dxID, dyID, Jupiter);
+		drawIt(callistoOrbit, time, dxID, dyID, Jupiter);
+		drawIt(Io, time, dxID, dyID, Jupiter);
+		drawIt(ioOrbit, time, dxID, dyID, Jupiter);
+		drawIt(Moon, time, dxID, dyID, Earth);
+		drawIt(moonOrbit, time, dxID, dyID, Earth);
+
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
