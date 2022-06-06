@@ -13,9 +13,10 @@ using namespace std;
 #include "Orbit.h"
 #include "Camera.h"
 
-void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID) {
+void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID, GLuint shaderProgramID) {
 	obiekt.update(time, dxID, dyID);
 	obiekt.VAO_.Bind();
+	glUniformMatrix4fv(glGetUniformLocation(shaderProgramID, "model"), 1, GL_FALSE, glm::value_ptr(obiekt.model));
 	glDrawElements(GL_TRIANGLES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
 	obiekt.VAO_.Unbind();
 }
@@ -40,24 +41,23 @@ void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiekt
 /*
 	TO-DO:
 
-	[ ] 3d		- zmiana kó³ na sfery
-	[ ] kamera	- ruch kamer¹
+	[X] 3d		- zmiana kó³ na sfery
+	[X] kamera	- ruch kamer¹
 	[ ] oœwietlenie i cieniowanie
 	[ ] tekstury
 */
 //CAMERA, RUCH KAMERY
-bool firstMouse = true;
-float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
-float pitch = 0.0f;
-float lastX = 800.0f / 2.0;
-float lastY = 600.0 / 2.0;
-float fov = 45.0f;
-glm::vec3 cameraFront;
 float deltaTime = 0., lastFrame = 0.;
-
-
-
-
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset);
+Camera* currentCamera;
+void framebuffer_size_callback(GLFWwindow* window, int width, int height) { // uruchamiane po zmianie rozmiaru okienka
+	glViewport(0, 0, width, height);
+}
+ostream& operator<<(ostream& stream, const glm::vec3& v)
+{
+	stream << "(" << v.x << "," << v.y << "," << v.z << ")";
+	return stream;
+}
 int width = 800, height = 800;
 int main() {
 	srand(time(NULL));
@@ -81,10 +81,13 @@ int main() {
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 	// Specify the viewport of OpenGL in the Window
-	glViewport(0, 0, width, height); // viewport:  from x = 0, y = 0, to x = 800, y = 800
-
+	glViewport(0, 0, width, height); // viewport
+	// Input + Camera
+	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
+	glfwSetScrollCallback(window, scroll_callback);
 	// Utwórz obiekt Vertex Shader
 	Shader shaderProgram("color_uniform.vert", "default.frag");
+	//Shader shaderProgram("color_uniform.vert", "lightning.frag");
 
 	GLuint dxID = glGetUniformLocation(shaderProgram.ID, "dx");
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
@@ -139,12 +142,9 @@ int main() {
 	Orbit moonOrbit(3.701436014, 3.567086838, Earth.center_x, Earth.center_y);
 
 	// ========= // camera
-
-	Camera camera(width, height, glm::vec3(-8, 11, -8));
-	cameraFront = glm::vec3(0.628001, -0.480989, 0.611772); pitch = -28.75; yaw = 44.25;
-	
-	// ========= //
-
+	Camera camera(width, height, glm::vec3(-2.2f, 2.2f, 1.0f), glm::vec3(0.6f, -0.6f, -0.5f));
+	currentCamera = &camera;
+	// ========= // ustawienia + kolor t³a
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
 	double time = 0.;
 	//double sizeOfPictureScaller = 0.1;
@@ -161,11 +161,26 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		// shader
 		shaderProgram.Activate();
-		camera.Matrix(45.0f, 0.5f, 50.0f, shaderProgram, "camMatrix");
-		// rysowanie trójk¹tów
+		// input + ruch kamery
+		camera.Inputs(window); //obs³uga wejœcia do kamery
+		camera.updateMatrix(camera.fov, 0.5f, 50.0f);
+
+		shaderProgram.Activate();
+		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
+		camera.Matrix(shaderProgram, "camMatrix");
+
+		//time logic
+		float currentFrame = glfwGetTime();
+		deltaTime = currentFrame - lastFrame;
+		lastFrame = currentFrame;
+
+		// rysowanie //
 		// ========= //
 		// ORBITY
-		
+		drawIt(Mercury, time, dxID, dyID, shaderProgram.ID);
+		drawIt(Earth, time, dxID, dyID, shaderProgram.ID);
+		drawIt(Sun, time, dxID, dyID, shaderProgram.ID);
+		/*
 		drawIt(mercuryOrbit, time, dxID, dyID);
 		drawIt(venusOrbit, time, dxID, dyID);
 		drawIt(earthOrbit, time, dxID, dyID);
@@ -198,7 +213,7 @@ int main() {
 		drawIt(ioOrbit, time, dxID, dyID, Jupiter);
 		drawIt(Moon, time, dxID, dyID, Earth);
 		drawIt(moonOrbit, time, dxID, dyID, Earth);
-
+		*/
 		// ========= //
 		// Odœwie¿ widok
 		glfwSwapBuffers(window);
@@ -207,4 +222,13 @@ int main() {
 	glfwDestroyWindow(window); //Delete window before ending the program
 	glfwTerminate(); //Terminate GLFW before ending the program 
 	return 0;
+}
+
+void scroll_callback(GLFWwindow* window, double xoffset, double yoffset)
+{
+	currentCamera->fov -= (float)yoffset;
+	if (currentCamera->fov < 1.0f)
+		currentCamera->fov = 1.0f;
+	if (currentCamera->fov > 90.0f)
+		currentCamera->fov = 90.0f;
 }
