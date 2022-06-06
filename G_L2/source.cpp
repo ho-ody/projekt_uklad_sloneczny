@@ -45,6 +45,20 @@ void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiekt
 	[ ] oœwietlenie i cieniowanie
 	[ ] tekstury
 */
+//CAMERA, RUCH KAMERY
+bool firstMouse = true;
+float yaw = -90.0f;	// yaw is initialized to -90.0 degrees since a yaw of 0.0 results in a direction vector pointing to the right so we initially rotate a bit to the left.
+float pitch = 0.0f;
+float lastX = 800.0f / 2.0;
+float lastY = 600.0 / 2.0;
+float fov = 45.0f;
+glm::vec3 cameraFront;
+float deltaTime = 0., lastFrame = 0.;
+
+
+
+
+int width = 800, height = 800;
 int main() {
 	srand(time(NULL));
 	glfwInit();
@@ -53,7 +67,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "glhf", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(width, height, "glhf", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
 	{
@@ -67,10 +81,10 @@ int main() {
 	//Load GLAD so it configures OpenGL
 	gladLoadGL();
 	// Specify the viewport of OpenGL in the Window
-	glViewport(0, 0, 800, 800); // viewport:  from x = 0, y = 0, to x = 800, y = 800
+	glViewport(0, 0, width, height); // viewport:  from x = 0, y = 0, to x = 800, y = 800
 
 	// Utwórz obiekt Vertex Shader
-	Shader shaderProgram("default.vert", "default.frag");
+	Shader shaderProgram("color_uniform.vert", "default.frag");
 
 	GLuint dxID = glGetUniformLocation(shaderProgram.ID, "dx");
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
@@ -124,6 +138,11 @@ int main() {
 	Planet Moon(0.058949131, 1, 3.701436014, 3.567086838, 254, 252, 215, Earth.center_x, Earth.center_y);
 	Orbit moonOrbit(3.701436014, 3.567086838, Earth.center_x, Earth.center_y);
 
+	// ========= // camera
+
+	Camera camera(width, height, glm::vec3(-8, 11, -8));
+	cameraFront = glm::vec3(0.628001, -0.480989, 0.611772); pitch = -28.75; yaw = 44.25;
+	
 	// ========= //
 
 	float bg_r = 0., bg_g = 0., bg_b = 0.25;
@@ -142,6 +161,7 @@ int main() {
 		glClear(GL_COLOR_BUFFER_BIT);
 		// shader
 		shaderProgram.Activate();
+		camera.Matrix(45.0f, 0.5f, 50.0f, shaderProgram, "camMatrix");
 		// rysowanie trójk¹tów
 		// ========= //
 		// ORBITY
