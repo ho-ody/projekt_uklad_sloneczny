@@ -36,6 +36,14 @@ void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiekt
 	glDrawElements(GL_LINES, obiekt.n_vertices, GL_UNSIGNED_INT, 0);
 	obiekt.VAO_.Unbind();
 }
+/*
+	TO-DO:
+
+	[ ] 3d		- zmiana kó³ na sfery
+	[ ] kamera	- ruch kamer¹
+	[ ] oœwietlenie i cieniowanie
+	[ ] tekstury
+*/
 int main() {
 	srand(time(NULL));
 	glfwInit();
