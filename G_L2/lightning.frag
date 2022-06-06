@@ -14,7 +14,7 @@ uniform vec3 camPos;
 void main()
 {
 	//ambient lighting
-	float ambient = 0.10f;
+	float ambient = 0.04f;
 
 	//diffuse lighting
 	vec3 normal = normalize(Normal);

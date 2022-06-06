@@ -10,6 +10,7 @@ public:
 	GLenum type;
 
 	Texture(const char* image, GLenum texType, GLenum slot, GLenum format, GLenum pixelType);
+	Texture();
 
 	void texUnit(Shader& shader, const char* uniform, GLuint unit);
 
