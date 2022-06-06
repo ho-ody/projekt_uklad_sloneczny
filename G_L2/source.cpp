@@ -12,6 +12,7 @@ using namespace std;
 #include "Planet.h"
 #include "Orbit.h"
 #include "Camera.h"
+#include "Texture.h"
 
 void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID, GLuint shaderProgramID) {
 	obiekt.update(time, dxID, dyID);
@@ -43,8 +44,8 @@ void drawIt(Orbit& obiekt, double time, GLuint dxID, GLuint dyID, Planet& obiekt
 
 	[X] 3d		- zmiana kó³ na sfery
 	[X] kamera	- ruch kamer¹
-	[ ] oœwietlenie i cieniowanie
-	[ ] tekstury
+	[X] oœwietlenie i cieniowanie
+	[X] tekstury
 */
 //CAMERA, RUCH KAMERY
 float deltaTime = 0., lastFrame = 0.;
@@ -67,6 +68,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
+
 	GLFWwindow* window = glfwCreateWindow(width, height, "glhf", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
@@ -82,12 +84,13 @@ int main() {
 	gladLoadGL();
 	// Specify the viewport of OpenGL in the Window
 	glViewport(0, 0, width, height); // viewport
+	glEnable(GL_DEPTH_TEST);
 	// Input + Camera
 	glfwSetFramebufferSizeCallback(window, framebuffer_size_callback);
 	glfwSetScrollCallback(window, scroll_callback);
 	// Utwórz obiekt Vertex Shader
-	Shader shaderProgram("color_uniform.vert", "default.frag");
-	//Shader shaderProgram("color_uniform.vert", "lightning.frag");
+	//Shader shaderProgram("color_uniform.vert", "default.frag");
+	Shader shaderProgram("color_uniform.vert", "lightning.frag");
 
 	GLuint dxID = glGetUniformLocation(shaderProgram.ID, "dx");
 	GLuint dyID = glGetUniformLocation(shaderProgram.ID, "dy");
@@ -141,6 +144,54 @@ int main() {
 	Planet Moon(0.058949131, 1, 3.701436014, 3.567086838, 254, 252, 215, Earth.center_x, Earth.center_y);
 	Orbit moonOrbit(3.701436014, 3.567086838, Earth.center_x, Earth.center_y);
 
+	// ========= // œwiat³o i cienie
+
+	Shader lightShader("light.vert", "light.frag");
+	VAO lightVAO;
+	lightVAO.Bind();
+	// Generates Vertex Buffer Object and links it to vertices
+	VBO lightVBO(Sun.vertices, sizeof(GLfloat) * Sun.n_vertices);
+	EBO lightEBO(Sun.indices, sizeof(GLuint) * Sun.n_indices);
+	// Links VBO attributes such as coordinates and colors to VAO
+	lightVAO.LinkAttrib(lightVBO, 0, 3, GL_FLOAT, 11 * sizeof(float), (void*)0);		//linkowanie konkretnych rzeczy z default.vert
+	lightVAO.LinkAttrib(lightVBO, 1, 3, GL_FLOAT, 11 * sizeof(float), (void*)(3 * sizeof(float)));
+	lightVAO.LinkAttrib(lightVBO, 2, 2, GL_FLOAT, 11 * sizeof(float), (void*)(6 * sizeof(float)));
+	lightVAO.LinkAttrib(lightVBO, 3, 3, GL_FLOAT, 11 * sizeof(float), (void*)(8 * sizeof(float)));
+	// Unbind all to prevent accidentally modifying them
+	lightVAO.Unbind();
+	lightVBO.Unbind();
+	lightVBO.Unbind();
+
+	glm::vec4 lightColor = glm::vec4(1.0f, 1.0f, 1.0f, 1.0f);
+	glm::vec3 lightPos = glm::vec3(0.5f, 0.5f, 0.5f);
+	lightPos = Sun.position;
+	glm::mat4 lightModel = glm::mat4(1.0f);
+	lightModel = glm::translate(lightModel, lightPos);
+
+	lightShader.Activate();
+	glUniformMatrix4fv(glGetUniformLocation(lightShader.ID, "model"), 1, GL_FALSE, glm::value_ptr(lightModel));
+	glUniform4f(glGetUniformLocation(lightShader.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+
+	shaderProgram.Activate();
+	//glUniformMatrix4fv(glGetUniformLocation(shaderProgram.ID, "model"), 1, GL_FALSE, glm::value_ptr(sphereMod));
+	glUniform4f(glGetUniformLocation(shaderProgram.ID, "lightColor"), lightColor.x, lightColor.y, lightColor.z, lightColor.w);
+	glUniform3f(glGetUniformLocation(shaderProgram.ID, "lightPos"), lightPos.x, lightPos.y, lightPos.z);
+
+
+
+
+
+
+	Texture texture("sun.png", GL_TEXTURE_2D, GL_TEXTURE0, GL_RGB, GL_UNSIGNED_BYTE);
+	texture.texUnit(shaderProgram, "tex0", 0);
+
+
+
+
+
+
+
+
 	// ========= // camera
 	Camera camera(width, height, glm::vec3(-2.2f, 2.2f, 1.0f), glm::vec3(0.6f, -0.6f, -0.5f));
 	currentCamera = &camera;
@@ -153,21 +204,22 @@ int main() {
 	glfwSwapInterval(1); //ograniczenie fps to synchronizacji vsync
 	while (!glfwWindowShouldClose(window))
 	{
-		time += 0.01; //czas - u¿ywane w kolorze t³a, ruchu planet
+		time += 0.001; //czas - u¿ywane w kolorze t³a, ruchu planet
 		// logika koloru t³a
 		bg_r = bg_g = cos(time/4.) / 26. ;
 		bg_b = sin(time/4.) / 14. + .25;
 		glClearColor(bg_r, bg_g, bg_b, 1.0f);
-		glClear(GL_COLOR_BUFFER_BIT);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT); //Wyczyœæ buffor I nadaj mu kolor
 		// shader
 		shaderProgram.Activate();
 		// input + ruch kamery
 		camera.Inputs(window); //obs³uga wejœcia do kamery
-		camera.updateMatrix(camera.fov, 0.5f, 50.0f);
+		camera.updateMatrix(camera.fov, 0.01f, 50.0f);
 
 		shaderProgram.Activate();
 		glUniform3f(glGetUniformLocation(shaderProgram.ID, "camPos"), camera.Position.x, camera.Position.y, camera.Position.z);
 		camera.Matrix(shaderProgram, "camMatrix");
+		texture.Bind();
 
 		//time logic
 		float currentFrame = glfwGetTime();
@@ -179,7 +231,13 @@ int main() {
 		// ORBITY
 		drawIt(Mercury, time, dxID, dyID, shaderProgram.ID);
 		drawIt(Earth, time, dxID, dyID, shaderProgram.ID);
-		drawIt(Sun, time, dxID, dyID, shaderProgram.ID);
+		//drawIt(Sun, time, dxID, dyID, shaderProgram.ID);
+
+		lightShader.Activate();
+		texture.Bind();
+		camera.Matrix(lightShader, "camMatrix");
+		lightVAO.Bind();
+		glDrawElements(GL_TRIANGLES, Sun.n_indices, GL_UNSIGNED_INT, 0);
 		/*
 		drawIt(mercuryOrbit, time, dxID, dyID);
 		drawIt(venusOrbit, time, dxID, dyID);
