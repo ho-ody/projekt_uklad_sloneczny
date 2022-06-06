@@ -4,6 +4,12 @@
 #include "VBO.h"
 #include "EBO.h"
 #include "Orbit.h"
+#include <glm/glm.hpp>
+#include <glm/gtc/matrix_transform.hpp> // glm::translate, glm::rotate, glm::scale, glm::perspective
+#include <glm/gtx/rotate_vector.hpp>
+#include <glm/gtx/vector_angle.hpp>
+#include <glm/gtc/type_ptr.hpp>
+#include <GLFW/glfw3.h>
 
 class Planet {
 public:
@@ -12,6 +18,9 @@ public:
 	int n_vertices;
 	GLuint* indices;
 	int n_indices;
+
+	glm::vec3 position;
+	glm::mat4 model;
 
 	VAO VAO_;
 	VBO VBO_;
