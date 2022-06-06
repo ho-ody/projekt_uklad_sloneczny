@@ -13,7 +13,7 @@
 
 class Orbit {
 public:
-	const int n_wierzcholkow = 101;
+	const int n_wierzcholkow = 200;
 	GLfloat* vertices;
 	int n_vertices;
 	GLuint* indices;

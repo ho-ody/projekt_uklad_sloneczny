@@ -25,11 +25,6 @@ void orbit_generuj_koordynaty_wierzcholkow(double rx, double ry, double kat, int
 		*y *= -1;
 	}
 }
-
-/*
-float multi = 10;
-	position.x = 1. / speed * radius_x * sin(speed * time) / multi;
-*/
 Orbit::Orbit(double rx, double ry, double center_x_in, double center_y_in) {
 	//std zmienne
 	color[0] = 1;
