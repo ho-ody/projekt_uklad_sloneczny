@@ -11,6 +11,7 @@ using namespace std;
 #include "ShaderClass.h"
 #include "Planet.h"
 #include "Orbit.h"
+#include "Camera.h"
 
 void drawIt(Planet &obiekt, double time, GLuint dxID, GLuint dyID) {
 	obiekt.update(time, dxID, dyID);
@@ -52,7 +53,7 @@ int main() {
 	glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
 	glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);
 
-	GLFWwindow* window = glfwCreateWindow(800, 800, "lab4", NULL, NULL);
+	GLFWwindow* window = glfwCreateWindow(800, 800, "glhf", NULL, NULL);
 	// Error check if the window fails to create
 	if (window == NULL)
 	{
