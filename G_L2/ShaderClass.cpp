@@ -48,6 +48,7 @@ Shader::Shader(const char* vertexFile, const char* fragmentFile) {
 	compileErrors(ID, "PROGRAM ", vertexCode + "\n" + fragmentCode);
 	glDeleteShader(vertexShader);
 	glDeleteShader(fragmentShader);
+	cerr << endl;
 }
 
 void Shader::Activate() {
