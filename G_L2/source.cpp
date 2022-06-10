@@ -120,34 +120,34 @@ int main() {
 	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
 	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
 	//
-	Planet Mercury("mercury.png",0.069849839, 2.306994196, 20.6064265, 17.91523936, 26, 26, 26);
+	Planet Mercury("Textures/8k_mercury.jpg",0.069849839, 2.306994196, 20.6064265, 17.91523936, 26, 26, 26);
 	Orbit mercuryOrbit(Mercury.radius_x, Mercury.radius_y);
-	Planet Venus("sun.png",0.11001818, 1.972026594, 23.88428091, 23.73729699, 230, 230, 230);
+	Planet Venus("Textures/8k_venus_surface.jpg",0.11001818, 1.972026594, 23.88428091, 23.73729699, 230, 230, 230);
 	Orbit venusOrbit(Venus.radius_x,Venus.radius_y);
-	Planet Earth("earth2048.png", 0.112942463, 1.819645875, 26.68401649, 26.38816044, 47, 106, 105);
+	Planet Earth("Textures/8k_earth_daymap.jpg", 0.112942463, 1.819645875, 26.68401649, 26.38816044, 47, 106, 105);
 	Orbit earthOrbit(Earth.radius_x, Earth.radius_y);
-	Planet Mars("sun.png", 0.082492424, 1.636391694, 31.45597276, 29.4818427, 153, 61, 0);
+	Planet Mars("Textures/8k_mars.jpg", 0.082492424, 1.636391694, 31.45597276, 29.4818427, 153, 61, 0);
 	Orbit marsOrbit(Mars.radius_x, Mars.radius_y);
-	Planet Jupiter("sun.png", 0.378132252, 1.206464071, 46.7423658, 45.24557103, 176, 127, 53);
+	Planet Jupiter("Textures/8k_jupiter.jpg", 0.378132252, 1.206464071, 46.7423658, 45.24557103, 176, 127, 53);
 	Orbit jupiterOrbit(Jupiter.radius_x, Jupiter.radius_y);
-	Planet Saturn("sun.png", 0.347182949, 1.038160767, 57.362621, 55.26047248, 176, 143, 54);
+	Planet Saturn("Textures/8k_saturn.jpg", 0.347182949, 1.038160767, 57.362621, 55.26047248, 176, 143, 54);
 	Orbit saturnOrbit(Saturn.radius_x, Saturn.radius_y);
-	Planet Ur_Anus("sun.png", 0.226092901, 0.869226987, 72.11247852, 70.05098327, 85, 128, 170);
+	Planet Ur_Anus("Textures/2k_uranus.jpg", 0.226092901, 0.869226987, 72.11247852, 70.05098327, 85, 128, 170);
 	Orbit uranusOrbit(Ur_Anus.radius_x, Ur_Anus.radius_y);
-	Planet Neptune("sun.png", 0.222548871, 0.774596669, 82.85278982, 82.24130783, 54, 104, 150);
+	Planet Neptune("Textures/2k_neptune.jpg", 0.222548871, 0.774596669, 82.85278982, 82.24130783, 54, 104, 150);
 	Orbit neptuneOrbit(Neptune.radius_x, Neptune.radius_y);
 
-	Planet Sun("sun.png", 1, 179830496, 1, 0, 239, 142, 56);
+	Planet Sun("Textures/8k_sun.jpg", 1, 179830496, 1, 0, 239, 142, 56);
 
-	Planet Ganymede("mercury.png", 0.072594766, 4.5, 5.114045609, 5.114045609, 179, 177, 176, Jupiter.center_x, Jupiter.center_y);
+	Planet Ganymede("Textures/moon1.jpg", 0.072594766, 4.5, 5.114045609, 5.114045609, 179, 177, 176, Jupiter.center_x, Jupiter.center_y);
 	Orbit ganymedeOrbit(5.114045609, 5.114045609, Jupiter.center_x, Jupiter.center_y);
-	Planet Titan("sun.png", 0.0717635, 1, 5.313292846, 5.313292846, 224, 194, 133, Saturn.center_x, Saturn.center_y);
+	Planet Titan("Textures/moon2.jpg", 0.0717635, 1, 5.313292846, 5.313292846, 224, 194, 133, Saturn.center_x, Saturn.center_y);
 	Orbit titanOrbit(5.313292846, 5.313292846, Saturn.center_x, Saturn.center_y);
-	Planet Callisto("sun.png", 0.06942622, 1, 6.171005793, 6.171005793, 160, 189, 183, Jupiter.center_x, Jupiter.center_y);
+	Planet Callisto("Textures/moon3.jpg", 0.06942622, 1, 6.171005793, 6.171005793, 160, 189, 183, Jupiter.center_x, Jupiter.center_y);
 	Orbit callistoOrbit(6.171005793, 6.171005793, Jupiter.center_x, Jupiter.center_y);
-	Planet Io("sun.png", 0.06035727, 1, 3.74948141, 3.74948141, 204, 153, 0, Jupiter.center_x, Jupiter.center_y);
+	Planet Io("Textures/moon4.jpg", 0.06035727, 1, 3.74948141, 3.74948141, 204, 153, 0, Jupiter.center_x, Jupiter.center_y);
 	Orbit ioOrbit(3.74948141, 3.74948141, Jupiter.center_x, Jupiter.center_y);
-	Planet Moon("sun.png", 0.058949131, 10, 3.701436014, 3.567086838, 254, 252, 215, Earth.center_x, Earth.center_y);
+	Planet Moon("Textures/8k_moon.jpg", 0.058949131, 10, 3.701436014, 3.567086838, 254, 252, 215, Earth.center_x, Earth.center_y);
 	Orbit moonOrbit(3.701436014, 3.567086838, Earth.center_x, Earth.center_y);
 
 	// ========= // œwiat³o i cienie
