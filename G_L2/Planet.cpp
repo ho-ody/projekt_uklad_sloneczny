@@ -25,13 +25,13 @@ void gen_sphere(float radius, GLfloat* vertices = NULL, GLuint* indices = NULL) 
 	{
 		stackAngle = M_PI / 2 - i * stackStep;        // starting from pi/2 to -pi/2
 		xy = radius * cosf(stackAngle);             // r * cos(u)
-		z = radius * sinf(stackAngle);              // r * sin(u)
+		y = radius * sinf(stackAngle);              // r * sin(u)
 		for (int j = 0; j <= sectorCount; ++j)
 		{
 			sectorAngle = j * sectorStep;           // starting from 0 to 2pi
 			// vertex position (x, y, z)
 			x = xy * cosf(sectorAngle);             // r * cos(u) * cos(v)
-			y = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
+			z = xy * sinf(sectorAngle);             // r * cos(u) * sin(v)
 			vertices[0 + v_counter * 11] = x;
 			vertices[1 + v_counter * 11] = y;
 			vertices[2 + v_counter * 11] = z;
@@ -100,7 +100,7 @@ Planet::Planet(const char* texture_name, double size_in, double speed_in, double
 	color[0] = color_r / 255;
 	color[1] = color_g / 255;
 	color[2] = color_b / 255;
-	size =  2 * size_in;
+	size = 2 * size_in;
 	radius_x = radius_x_in;
 	radius_y = radius_y_in;
 	speed = speed_in;
@@ -109,8 +109,8 @@ Planet::Planet(const char* texture_name, double size_in, double speed_in, double
 	n_indices = 6 * (stackCount - 1) * sectorCount;
 	vertices = new GLfloat[n_vertices];
 	indices = new GLuint[n_indices];
-	gen_sphere(size/10., vertices, indices);
-			
+	gen_sphere(size / 10., vertices, indices);
+
 	//VAO,VBO,EBO
 	VAO_.Bind();
 	VBO_ = VBO(vertices, sizeof(GLfloat) * n_vertices);
@@ -128,7 +128,7 @@ Planet::Planet(const char* texture_name, double size_in, double speed_in, double
 	// kolejnosc argumentow:
 	//	 rozmiar_planety								
 	//   predkosc_ruchu_planety						
-	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips ró¿ne)
+	//   promien_okregu_x, promien_okregu_y			  (dla okregu takie same, dla elips r?ne)
 	//   color_r, color_g, color_b					  (kolejne wartosci koloru z przed. [0.,1.]
 	//   srodek_okregu_ruchu_x, srodek_okregu_ruchu_y (koordynaty srodka, standardowo rowne 0, mozna pominac przy wpisywaniu)
 }
@@ -156,7 +156,7 @@ void Planet::updateCenterByOtherPlanet(double time, double centerToFollow_x, dou
 	model = glm::translate(model, position);
 }
 
-Planet::~Planet(){
+Planet::~Planet() {
 	texture.Delete();
 	delete[] vertices, indices;
 	VAO_.Delete();
